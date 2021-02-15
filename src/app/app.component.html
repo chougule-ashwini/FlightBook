@@ -1,0 +1,47 @@
+<!-- Your code here -->
+<div class="search-bar">
+  <form>
+    <h1 id="title">Flight Booking</h1>
+    <label>Source</label>
+    <input type="text" id="source" name="source" [(ngModel)]="source" />
+    <label>Destination</label>
+    <input type="text" id="destination" name="destination" [(ngModel)]="destination" />
+    <label>When</label>
+    <input type="date" id="when" name="when" [(ngModel)]="booking_date" />
+    <button id="search_flights" role="button"
+      (click)="available_flight = flightService.searchFlight(source,destination)">Search Flight</button>
+  </form>
+</div>
+<div class="search-list">
+  <div class="search-flight" *ngFor="let flight of available_flight">
+    <img src="../assets/flight-icon.png" class="icon">
+    <div class="details">
+      <h1>{{flight.arrival.toISOString()}}</h1>
+      <p>{{flight.company}}</p>
+    </div>
+    <div class="duration">
+      <h1>{{flight.duration}} mins</h1>
+      <p>{{flight.source.key}} - {{flight.destination.key}}</p>
+    </div>
+    <div class="price">
+      <h1>&#x20B9; {{flight.price}}</h1>
+      <button id="booknow_btn" (click)="booking_conf_frm_visible = true">Book Now</button>
+    </div>
+  </div>
+</div>
+<div class="booknow-frm" *ngIf="booking_conf_frm_visible">
+  <div class="container">
+    <div *ngIf="booking_conf_frm_visible && !booking_conf_frm_submit">
+      <h2>Your Details</h2>
+      <input type="text" placeholder="Your Name" [(ngModel)]="name" />
+      <input type="email" placeholder="Your Email" [(ngModel)]="email" />
+      <button id="confirm_booking_btn" (click)="booking_conf_frm_submit = flightService.booknow(name,email)">Confirm
+        Booking</button>
+      <button (click)="closeModal()">Cancel</button>
+    </div>
+    <div *ngIf="booking_conf_frm_submits">
+      <p>Booking Confirmed!</p>
+      <button (click)="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
